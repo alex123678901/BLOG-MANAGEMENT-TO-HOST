@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | BlogSpace</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body style="height: 100vh; display: flex; align-items: center; justify-content: center; background: #e2e8f0;">
+    <div class="card" style="width: 100%; max-width: 400px; padding: 3rem;">
+        <h2 style="margin-bottom: 2rem; text-align: center; font-size: 1.5rem;">Welcome Back</h2>
+        <form id="login-form">
+            <div class="form-group">
+                <label>Username or Email</label>
+                <input type="text" id="username" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Login</button>
+        </form>
+        <p style="margin-top: 2rem; text-align: center; color: var(--text-secondary); font-size: 0.875rem;">
+            Don't have an account? <a href="/register.html" style="color: var(--primary-color);">Sign Up</a>
+        </p>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await apiRequest('/auth/login', {
+                    method: 'POST',
+                    body: JSON.stringify({ username, password })
+                });
+
+                auth.setToken(response.token);
+                auth.setUser(response);
+
+                if (response.roles.includes('ROLE_ADMIN') || response.roles.includes('ROLE_AUTHOR') || response.roles.includes('ROLE_READER')) {
+                    window.location.href = '/dashboard.html';
+                } else {
+                    window.location.href = '/index.html';
+                }
+            } catch (err) {
+                alert(err.message);
+            }
+        });
+    </script>
+</body>
+
+</html>

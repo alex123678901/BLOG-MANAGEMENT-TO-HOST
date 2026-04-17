@@ -1,0 +1,2 @@
+curl.exe -X POST http://localhost:8080/api/users/register -H "Content-Type: application/json" -d "{\"username\":\"testuser5\",\"password\":\"password\",\"email\":\"test5@example.com\",\"firstName\":\"Test\",\"lastName\":\"User\",\"roles\":[\"ROLE_READER\"]}"
+curl.exe -X POST http://localhost:8080/api/auth/login -H "Content-Type: application/json" -d "{\"username\":\"testuser5\",\"password\":\"password\"}"

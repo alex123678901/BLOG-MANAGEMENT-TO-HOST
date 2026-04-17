@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat | BlogSpace</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <a href="/" class="logo">BlogSpace Chat</a>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/profile.html">Profile</a>
+            <a href="#" id="logout-btn">Logout</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="card">
+            <div id="user-selection" class="form-group">
+                <label>Select User to Chat With</label>
+                <select id="receiver-select" class="input">
+                    <option value="">Choose a user...</option>
+                </select>
+            </div>
+
+            <div id="chat-box" class="chat-container" style="display: none;">
+                <div id="chat-messages" class="chat-messages">
+                    <!-- Messages will appear here -->
+                </div>
+                <div class="form-group" style="display: flex; gap: 1rem; margin-bottom: 0;">
+                    <input type="text" id="message-input" placeholder="Type a message..." style="flex: 1;">
+                    <button id="send-btn" class="btn btn-primary">Send</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/js/app.js"></script>
+    <script>
+        let stompClient = null;
+        let currentReceiverId = null;
+        const currentUser = auth.getUser();
+
+        function connect() {
+            const socket = new SockJS('/ws');
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, (frame) => {
+                console.log('Connected: ' + frame);
+                stompClient.subscribe('/user/queue/messages', (message) => {
+                    const msg = JSON.parse(message.body);
+                    if (msg.sender.id == currentReceiverId) {
+                        appendMessage(msg, 'received');
+                    } else {
+                        showNotification(`New message from ${msg.sender.username}`);
+                    }
+                });
+            });
+        }
+
+        function appendMessage(msg, type) {
+            const container = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.className = `message message-${type}`;
+            div.textContent = msg.content;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        async function loadHistory(receiverId) {
+            try {
+                const history = await apiRequest(`/chat/history?user1Id=${currentUser.id}&user2Id=${receiverId}`);
+                const container = document.getElementById('chat-messages');
+                container.innerHTML = history.map(msg => `
+                    <div class="message message-${msg.sender.id == currentUser.id ? 'sent' : 'received'}">
+                        ${msg.content}
+                    </div>
+                `).join('');
+                container.scrollTop = container.scrollHeight;
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!auth.isAuthenticated()) {
+                window.location.href = '/login.html';
+                return;
+            }
+
+            connect();
+
+            try {
+                const users = await apiRequest('/users');
+                const select = document.getElementById('receiver-select');
+                users.filter(u => u.id != currentUser.id).forEach(u => {
+                    const opt = document.createElement('option');
+                    opt.value = u.id;
+                    opt.textContent = u.username;
+                    select.appendChild(opt);
+                });
+            } catch (err) {
+                showNotification('Failed to load users', 'error');
+            }
+
+            document.getElementById('receiver-select').addEventListener('change', (e) => {
+                currentReceiverId = e.target.value;
+                if (currentReceiverId) {
+                    document.getElementById('chat-box').style.display = 'flex';
+                    loadHistory(currentReceiverId);
+                } else {
+                    document.getElementById('chat-box').style.display = 'none';
+                }
+            });
+
+            document.getElementById('send-btn').addEventListener('click', async () => {
+                const input = document.getElementById('message-input');
+                const content = input.value.trim();
+                if (!content || !currentReceiverId) return;
+
+                try {
+                    const msg = await apiRequest(`/chat/send?senderId=${currentUser.id}&receiverId=${currentReceiverId}`, {
+                        method: 'POST',
+                        body: JSON.stringify(content)
+                    });
+                    appendMessage(msg, 'sent');
+                    input.value = '';
+                } catch (err) {
+                    showNotification(err.message, 'error');
+                }
+            });
+
+            document.getElementById('logout-btn').addEventListener('click', () => {
+                auth.logout();
+                window.location.href = '/';
+            });
+        });
+    </script>
+</body>
+
+</html>

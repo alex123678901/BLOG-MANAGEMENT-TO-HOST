@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Management System | Discover Stories</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <header>
+        <a href="/" class="logo">BlogSpace</a>
+        <nav id="nav-links">
+            <a href="/login.html" id="login-link">Login</a>
+            <a href="/register.html" id="register-link" class="btn btn-primary">Sign Up</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="hero card"
+            style="text-align: center; background: linear-gradient(135deg, #2563eb, #1e40af); color: white;">
+            <h1 style="font-size: 3rem; margin-bottom: 1rem;">Explore the World through Words</h1>
+            <p style="font-size: 1.25rem; opacity: 0.9;">A clean and minimal blog platform for writers and readers.</p>
+        </section>
+
+        <div id="posts-container" class="post-grid">
+            <!-- Posts will be loaded here via JS -->
+            <div class="card" style="grid-column: 1 / -1; text-align: center;">
+                <p>Loading posts...</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="/js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const nav = document.getElementById('nav-links');
+            
+            // Robust Session Check
+            const user = auth.getUser();
+            const token = auth.getToken();
+            
+            if (token && user && user.username) {
+                const dashboardLink = '<a href="/dashboard.html" style="margin-right: 1.5rem;">Go to Dashboard</a>';
+
+                nav.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        ${dashboardLink}
+                        <span style="color: var(--text-secondary); background: rgba(0,0,0,0.05); padding: 0.4rem 0.8rem; border-radius: 2rem; font-size: 0.9rem;">
+                            Welcome, <strong style="color: var(--text-primary);">${user.username}</strong>
+                        </span>
+                        <a href="#" id="logout-btn" class="btn btn-secondary" style="margin-left: 0.5rem; font-size: 0.85rem;">Logout</a>
+                    </div>
+                `;
+                document.getElementById('logout-btn').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    auth.logout();
+                    window.location.reload();
+                });
+            } else if (token || user) {
+                // If session is inconsistent, clear it to prevent "Empty Welcome"
+                auth.logout();
+            }
+
+            try {
+                const response = await apiRequest('/posts');
+                const posts = response.content || response;
+
+                const container = document.getElementById('posts-container');
+                container.innerHTML = posts.length ? posts.map(post => {
+                    const mediaHtml = post.mediaType === 'VIDEO'
+                        ? `<div class="post-media-container">
+                             <video controls><source src="${post.featuredImage}" type="video/mp4"></video>
+                           </div>`
+                        : (post.featuredImage 
+                            ? `<div class="post-media-container"><img src="${post.featuredImage}" alt="${post.title}"></div>` 
+                            : '');
+                    return `
+                        <div class="post-card">
+                            ${mediaHtml}
+                            <div class="post-card-content">
+                                <div style="margin-bottom: 0.5rem; display: flex; flex-wrap: wrap; gap: 0.25rem;">
+                                    ${post.categories.map(c => `<span class="badge">${c}</span>`).join('')}
+                                </div>
+                                <h3>${post.title}</h3>
+                                <p>${post.summary || post.content.substring(0, 100) + '...'}</p>
+                                <a href="/post.html?id=${post.id}" class="btn btn-primary" style="font-size: 0.8rem; width: 100%; text-align: center; margin-top: auto;">Read More</a>
+                            </div>
+                        </div>
+                    `;
+                }).join('') : '<div class="card" style="grid-column: 1 / -1; text-align: center;"><p>No posts found.</p></div>';
+            } catch (err) {
+                console.error(err);
+            }
+        });
+    </script>
+</body>
+
+</html>

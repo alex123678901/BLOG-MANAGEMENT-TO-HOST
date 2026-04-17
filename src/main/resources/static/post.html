@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Post | BlogSpace</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .post-header {
+            margin-bottom: 3rem;
+        }
+
+        .post-content {
+            font-size: 1.125rem;
+            line-height: 1.8;
+            color: #334155;
+        }
+
+        .comment-section {
+            margin-top: 5rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 3rem;
+        }
+
+        .comment {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f1f5f9;
+            border-radius: 0.5rem;
+        }
+
+        .comment-meta {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .post-header h1 {
+                font-size: 2rem !important;
+            }
+            .post-content {
+                font-size: 1rem;
+            }
+            .comment-section {
+                padding-top: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="/" class="logo">BlogSpace</a>
+        <nav id="nav-links">
+            <a href="/login.html">Login</a>
+            <a href="/register.html" class="btn btn-primary">Sign Up</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <article class="card">
+            <div id="post-header" class="post-header">
+                <p>Loading post...</p>
+            </div>
+            <div id="post-content" class="post-content"></div>
+        </article>
+
+        <section class="comment-section">
+            <h3>Comments (<span id="comment-count">0</span>)</h3>
+            <div id="comment-form-container" style="margin: 2rem 0;">
+                <textarea id="comment-input" placeholder="Join the discussion..." rows="3"></textarea>
+                <button id="submit-comment" class="btn btn-primary" style="margin-top: 1rem;">Post Comment</button>
+            </div>
+            <div id="comments-display">
+                <p>No comments yet. Be the first to share your thoughts!</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="/js/app.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const postId = urlParams.get('id');
+        const userData = auth.getUser();
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!postId) {
+                window.location.href = '/index.html';
+                return;
+            }
+
+            // Auth UI
+            const nav = document.getElementById('nav-links');
+            if (auth.isAuthenticated()) {
+                const user = auth.getUser();
+                nav.innerHTML = `<span>Welcome, <strong>${user.username}</strong></span><a href="#" id="logout-btn">Logout</a>`;
+                document.getElementById('logout-btn').onclick = () => { auth.logout(); window.location.reload(); };
+            } else {
+                document.getElementById('comment-form-container').innerHTML = '<p>Please <a href="/login.html">login</a> to comment.</p>';
+            }
+
+            try {
+                // Load Post
+                const post = await apiRequest(`/posts/${postId}`);
+                
+                const mediaHtml = post.mediaType === 'VIDEO'
+                    ? `<video controls style="width:100%; max-height:500px; display:block; background:#000; margin-bottom:2rem; border-radius:0.5rem;"><source src="${post.featuredImage}" type="video/mp4"></video>`
+                    : (post.featuredImage ? `<img src="${post.featuredImage}" alt="${post.title}" style="width:100%; max-height:600px; object-fit:contain; background:#f1f5f9; margin-bottom:2rem; border-radius:0.5rem; display:block;">` : '');
+
+                document.getElementById('post-header').innerHTML = `
+                    <h1 style="font-size: 2.5rem; margin-bottom: 1rem; line-height: 1.2;">${post.title}</h1>
+                    <div style="color: var(--text-secondary); margin-bottom: 2rem;">By <strong>${post.authorUsername}</strong> | ${new Date(post.createdAt).toLocaleDateString()}</div>
+                    ${mediaHtml}
+                `;
+                document.getElementById('post-content').innerHTML = post.content.replace(/\n/g, '<br>');
+
+                // Load Comments
+                const comments = await apiRequest(`/comments/post/${postId}`);
+                renderComments(comments, post.author.username);
+
+            } catch (err) {
+                alert('Failed to load post: ' + err.message);
+            }
+        });
+
+        function renderComments(comments, postAuthorUsername) {
+            const container = document.getElementById('comments-display');
+            document.getElementById('comment-count').textContent = comments.length;
+            if (comments.length === 0) {
+                container.innerHTML = `<p style="color:var(--text-muted);font-size:0.85rem;">No comments yet. Be first!</p>`;
+                return;
+            }
+
+            const isPostAuthor = (userData && userData.username === postAuthorUsername);
+
+            function renderCommentNode(c, depth = 0) {
+                const isCommentAuthor = (userData && userData.username === c.authorUsername);
+                const canDelete = isPostAuthor || isCommentAuthor;
+                const canReply = isPostAuthor && depth === 0;
+
+                let actions = '';
+                if (canDelete) {
+                    actions += `<span style="font-size:0.75rem;cursor:pointer;color:var(--accent);margin-left:0.5rem;" onclick="deleteCommentNode(${c.id}, '${postAuthorUsername}')">Delete</span>`;
+                }
+                if (canReply) {
+                    actions += `<span style="font-size:0.75rem;cursor:pointer;color:var(--primary);margin-left:0.5rem;" onclick="showReplyBox(${c.id})">Reply</span>`;
+                }
+
+                let html = `
+                    <div style="margin-bottom:0.8rem; margin-left:${depth * 20}px; border-left:${depth > 0 ? '2px solid var(--glass)' : 'none'}; padding-left:${depth > 0 ? '10px' : '0'};">
+                        <div class="comment">
+                            <div class="comment-meta">
+                                <strong>${c.authorUsername || 'User'}</strong> • ${new Date(c.createdAt).toLocaleDateString()}
+                                <div style="display:inline-block; margin-left:0.5rem;">${actions}</div>
+                            </div>
+                            <div>${c.content}</div>
+                        </div>
+                        <div id="reply-box-${c.id}" style="display:none; margin-top:0.4rem; margin-bottom:1rem;">
+                            <div style="display:flex;gap:0.5rem;">
+                                <input type="text" id="reply-input-${c.id}" placeholder="Reply as author..." style="flex:1; border:1px solid var(--glass); border-radius:0.5rem; padding:0.5rem; background:rgba(255,255,255,0.05); color:#fff;">
+                                <button onclick="submitReplyNode(${c.id}, '${postAuthorUsername}')" class="btn btn-primary">Reply</button>
+                            </div>
+                        </div>
+                `;
+                if (c.replies && c.replies.length > 0) {
+                    c.replies.forEach(r => html += renderCommentNode(r, depth + 1));
+                }
+                html += `</div>`;
+                return html;
+            }
+
+            container.innerHTML = comments.map(c => renderCommentNode(c, 0)).join('');
+        }
+
+        async function deleteCommentNode(commentId, postAuthor) {
+            if (!confirm("Are you sure you want to delete this comment?")) return;
+            try {
+                const res = await fetch(`${API_BASE_URL}/comments/${commentId}?userId=${userData.id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${auth.getToken()}` }
+                });
+                if (res.ok) {
+                    const comments = await apiRequest(`/comments/post/${postId}`);
+                    renderComments(comments, postAuthor);
+                } else if (res.status === 403) {
+                    alert("Unauthorized to delete this comment.");
+                }
+            } catch (err) { console.error("Deletion failed", err); }
+        }
+
+        function showReplyBox(commentId) {
+            const box = document.getElementById(`reply-box-${commentId}`);
+            if (box) box.style.display = box.style.display === 'none' ? 'block' : 'none';
+        }
+
+        async function submitReplyNode(commentId, postAuthor) {
+            const input = document.getElementById(`reply-input-${commentId}`);
+            const content = input.value.trim();
+            if (!content) return;
+            try {
+                const res = await fetch(`${API_BASE_URL}/comments/${postId}?userId=${userData.id}`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${auth.getToken()}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content: content, parentId: commentId })
+                });
+                if (res.ok) {
+                    input.value = '';
+                    const comments = await apiRequest(`/comments/post/${postId}`);
+                    renderComments(comments, postAuthor);
+                }
+            } catch(err) { console.error('Reply failed', err); }
+        }
+
+        document.getElementById('submit-comment')?.addEventListener('click', async () => {
+            const content = document.getElementById('comment-input').value;
+            if (!content) return;
+
+            try {
+                await apiRequest(`/comments/${postId}?userId=${auth.getUser().id}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content: content })
+                });
+                window.location.reload();
+            } catch (err) {
+                alert(err.message);
+            }
+        });
+    </script>
+</body>
+
+</html>

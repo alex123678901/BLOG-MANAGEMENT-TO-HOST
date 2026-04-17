@@ -1,0 +1,1 @@
+curl.exe -X GET http://localhost:8080/api/activity/4 -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlcjUiLCJpYXQiOjE3NzIyNzQxOTMsImV4cCI6MTc3MjM2MDU5M30.AJg54j5NxpOTUC88to9Ie92YgTTaktQzp-7YPDkgM-s" 
