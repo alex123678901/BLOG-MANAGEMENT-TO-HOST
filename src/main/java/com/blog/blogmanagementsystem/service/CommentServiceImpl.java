@@ -36,7 +36,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public com.blog.blogmanagementsystem.dto.CommentResponse addComment(Long postId, Long userId, String content, Long parentId) {
+    public com.blog.blogmanagementsystem.dto.CommentResponse addComment(Long postId, Long userId, String content,
+            Long parentId) {
         BlogPost post = blogPostRepository.findById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException("BlogPost", "id", postId));
         User user = userRepository.findById(userId)
@@ -49,8 +50,8 @@ public class CommentServiceImpl implements CommentService {
 
         if (parentId != null) {
             Comment parent = commentRepository.findById(parentId)
-                .orElseThrow(() -> new ResourceNotFoundException("Comment", "id", parentId));
-            
+                    .orElseThrow(() -> new ResourceNotFoundException("Comment", "id", parentId));
+
             // Per user request: only allow the owner of the post to reply to a comment.
             if (!post.getAuthor().getId().equals(user.getId())) {
                 throw new RuntimeException("Only the author of the post can reply to comments.");
@@ -65,13 +66,15 @@ public class CommentServiceImpl implements CommentService {
         // Notify original commenter if it's a reply
         if (parentId != null) {
             Comment parent = commentRepository.findById(parentId).get(); // Safely checked earlier
-            // Only notify if they aren't somehow replying to themselves (though admins could)
+            // Only notify if they aren't somehow replying to themselves (though admins
+            // could)
             if (!parent.getUser().getId().equals(user.getId())) {
                 String message = user.getFirstName() + " " + user.getLastName() + " (@" + user.getUsername()
                         + ") replied to your comment on: " + post.getTitle();
-                notificationService.createNotification(parent.getUser(), message, NotificationType.COMMENT, post.getId());
+                notificationService.createNotification(parent.getUser(), message, NotificationType.COMMENT,
+                        post.getId());
             }
-        } 
+        }
         // Notify post author if it's a direct comment
         else if (!post.getAuthor().getId().equals(user.getId())) {
             String message = user.getFirstName() + " " + user.getLastName() + " (@" + user.getUsername()
@@ -98,8 +101,10 @@ public class CommentServiceImpl implements CommentService {
         response.setContent(comment.getContent());
         response.setCreatedAt(comment.getCreatedAt());
         response.setAuthorUsername(comment.getUser() != null ? comment.getUser().getUsername() : "Unknown");
+        response.setAuthorId(comment.getUser() != null ? comment.getUser().getId() : -1L);
         if (comment.getReplies() != null && !comment.getReplies().isEmpty()) {
-            response.setReplies(comment.getReplies().stream().map(this::mapToResponse).collect(java.util.stream.Collectors.toList()));
+            response.setReplies(comment.getReplies().stream().map(this::mapToResponse)
+                    .collect(java.util.stream.Collectors.toList()));
         }
         return response;
     }

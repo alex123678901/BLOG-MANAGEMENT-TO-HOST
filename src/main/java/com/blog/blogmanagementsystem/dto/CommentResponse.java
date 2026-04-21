@@ -7,6 +7,7 @@ public class CommentResponse {
     private Long id;
     private String content;
     private String authorUsername;
+    private Long authorId;
     private LocalDateTime createdAt;
     private List<CommentResponse> replies;
 
@@ -32,6 +33,14 @@ public class CommentResponse {
 
     public void setAuthorUsername(String authorUsername) {
         this.authorUsername = authorUsername;
+    }
+
+    public Long getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
     }
 
     public LocalDateTime getCreatedAt() {

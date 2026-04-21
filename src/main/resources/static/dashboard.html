@@ -114,7 +114,8 @@
             position: absolute;
             top: -5px;
             right: -5px;
-            background: #ef4444; /* bright red */
+            background: #ef4444;
+            /* bright red */
             color: white;
             font-size: 0.65rem;
             font-weight: bold;
@@ -126,9 +127,17 @@
         }
 
         @keyframes pulse-red {
-            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-            70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+            0% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+            }
         }
 
         .user-pill {
@@ -627,24 +636,73 @@
 
                     <!-- Add User Form (Initially Hidden) -->
                     <div id="add-user-form"
-                        style="display: none; background: var(--glass); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; border: 1px solid var(--primary-light);">
-                        <h4 style="margin-bottom: 1rem;">Create New Account</h4>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                            <input type="text" id="admin-new-username" placeholder="Username"
-                                style="padding: 0.75rem; border-radius: 8px; border: 1px solid var(--glass); background: rgba(255,255,255,0.05); color: var(--text-main); outline: none;">
-                            <input type="email" id="admin-new-email" placeholder="Email"
-                                style="padding: 0.75rem; border-radius: 8px; border: 1px solid var(--glass); background: rgba(255,255,255,0.05); color: var(--text-main); outline: none;">
-                            <input type="password" id="admin-new-pass" placeholder="Password"
-                                style="padding: 0.75rem; border-radius: 8px; border: 1px solid var(--glass); background: rgba(255,255,255,0.05); color: var(--text-main); outline: none;">
-                            <select id="admin-new-role"
-                                style="padding: 0.75rem; border-radius: 8px; border: 1px solid var(--glass); background: rgba(255,255,255,0.05); color: var(--text-main); outline: none;">
-                                <option value="ROLE_READER">Reader</option>
-                                <option value="ROLE_AUTHOR">Author</option>
-                                <option value="ROLE_ADMIN">Admin</option>
-                            </select>
+                        style="display: none; background: var(--glass); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; border: 1px solid var(--primary);">
+                        <h4 style="margin-bottom: 1.5rem;"><i class="fa-solid fa-user-plus"></i> Create New Account</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                            <div class="form-group">
+                                <label
+                                    style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">First
+                                    Name</label>
+                                <input type="text" id="admin-new-firstName" placeholder="x..."
+                                    style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--glass); background: rgba(255,255,255,0.05); color: var(--text-main); outline: none;">
+                            </div>
+                            <div class="form-group">
+                                <label
+                                    style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">Last
+                                    Name</label>
+                                <input type="text" id="admin-new-lastName" placeholder="x..."
+                                    style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--glass); background: rgba(255,255,255,0.05); color: var(--text-main); outline: none;">
+                            </div>
+                            <div class="form-group">
+                                <label
+                                    style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">Username</label>
+                                <input type="text" id="admin-new-username" placeholder="x..."
+                                    style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--glass); background: rgba(255,255,255,0.05); color: var(--text-main); outline: none;">
+                            </div>
+                            <div class="form-group">
+                                <label
+                                    style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">Email</label>
+                                <input type="email" id="admin-new-email" placeholder="john@example.com"
+                                    style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--glass); background: rgba(255,255,255,0.05); color: var(--text-main); outline: none;">
+                            </div>
+                            <div class="form-group">
+                                <label
+                                    style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">Password</label>
+                                <input type="password" id="admin-new-pass" placeholder="••••••••"
+                                    style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--glass); background: rgba(255,255,255,0.05); color: var(--text-main); outline: none;">
+                            </div>
+                            <div class="form-group">
+                                <label
+                                    style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">Role</label>
+                                <select id="admin-new-role"
+                                    style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--glass); background: rgba(255,255,255,0.05); color: var(--text-main); outline: none;">
+                                    <option value="ROLE_READER">Reader</option>
+                                    <option value="ROLE_AUTHOR">Author</option>
+                                    <option value="ROLE_ADMIN">Admin</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="grid-column: span 2;">
+                                <label
+                                    style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">Profile
+                                    Picture</label>
+                                <label class="upload-btn"
+                                    style="width: 100%; justify-content: center; border-style: dashed; padding: 1rem;">
+                                    <i class="fa-solid fa-image"></i>
+                                    <span id="admin-photo-status">Click to select photo</span>
+                                    <input type="file" id="admin-new-photo" accept="image/*" style="display: none;"
+                                        onchange="updateFileLabel(this, 'admin-photo-status')">
+                                </label>
+                            </div>
+                            <div class="form-group" style="grid-column: span 2;">
+                                <label
+                                    style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">Bio</label>
+                                <textarea id="admin-new-bio" placeholder="Tell us about this user..." rows="3"
+                                    style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--glass); background: rgba(255,255,255,0.05); color: var(--text-main); outline: none; resize: none;"></textarea>
+                            </div>
                         </div>
-                        <div style="margin-top: 1rem; display: flex; gap: 1rem;">
-                            <button class="btn-primary" onclick="adminCreateUser()">Create User</button>
+                        <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                            <button class="btn-primary" onclick="adminCreateUser()" style="flex: 1;">Create
+                                User</button>
                             <button class="btn-primary"
                                 style="background: transparent; border: 1px solid var(--glass); color: var(--text-muted);"
                                 onclick="toggleAddUserForm()">Cancel</button>
@@ -656,6 +714,7 @@
                                 <th style="padding: 1rem;">User</th>
                                 <th style="padding: 1rem;">Roles</th>
                                 <th style="padding: 1rem;">Status</th>
+                                <th style="padding: 1rem;">Activity</th>
                                 <th style="padding: 1rem;">Action</th>
                             </tr>
                         </thead>
@@ -705,7 +764,9 @@
 
             <!-- Home Tab / Feed -->
             <div id="home-tab" class="tab-content active">
-                <h2 style="margin-bottom: 1.5rem;">For You</h2>
+                <div id="home-header-container">
+                    <h2 style="margin-bottom: 1.5rem;">For You</h2>
+                </div>
                 <div id="feed-container">
                     <!-- Posts will appear here -->
                     <div class="card" style="text-align: center; color: var(--text-muted); padding: 3rem;">
@@ -803,7 +864,8 @@
                             <button onclick="backToMessagesList()"
                                 style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted);"><i
                                     class="fa-solid fa-arrow-left"></i></button>
-                            <div style="display: flex; align-items: center; gap: 1rem; cursor: pointer;" onclick="if(activeChatUserId) viewProfile(activeChatUserId)">
+                            <div style="display: flex; align-items: center; gap: 1rem; cursor: pointer;"
+                                onclick="if(activeChatUserId) viewProfile(activeChatUserId)">
                                 <img id="chat-target-avatar" src="https://via.placeholder.com/150"
                                     style="width: 40px; height: 40px; border-radius: 50%;">
                                 <h3 id="chat-target-name" style="margin: 0;">Chatting with...</h3>
@@ -834,9 +896,38 @@
                 </div>
             </div>
 
+            <!-- Post Detail Section -->
+            <div id="post-detail-tab" class="tab-content">
+                <div style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem;">
+                    <button onclick="goBackFromPost()" class="btn-primary"
+                        style="background: var(--glass); color: var(--text-main); padding: 0.5rem 1rem;">
+                        <i class="fa-solid fa-arrow-left"></i> Back
+                    </button>
+                    <h2>Post Details</h2>
+                </div>
+                <div id="post-detail-content" style="max-width: 700px; margin: 0 auto;">
+                </div>
+            </div>
+
+            <!-- User Activity Section -->
+            <div id="user-activity-tab" class="tab-content">
+                <div style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem;">
+                    <button onclick="switchTab('admin-users')" class="btn-primary"
+                        style="background: var(--glass); color: var(--text-main); padding: 0.5rem 1rem;">
+                        <i class="fa-solid fa-arrow-left"></i> Back
+                    </button>
+                    <h2>Activity History: <span id="activity-target-username" style="color: var(--primary);">User</span>
+                    </h2>
+                </div>
+                <div id="user-activity-content" class="card">
+                    <p style="text-align: center; padding: 2rem;">Select a user to view their history.</p>
+                </div>
+            </div>
+
             <!-- Profile Section -->
             <div id="profile-tab" class="tab-content">
-                <button onclick="goBackFromProfile()" class="btn-primary" style="margin-bottom: 1rem; background: var(--glass); color: var(--text-main); border: 1px solid var(--primary); display: flex; align-items: center; gap: 0.5rem; width: fit-content;">
+                <button onclick="goBackFromProfile()" class="btn-primary"
+                    style="margin-bottom: 1rem; background: var(--glass); color: var(--text-main); border: 1px solid var(--primary); display: flex; align-items: center; gap: 0.5rem; width: fit-content;">
                     <i class="fa-solid fa-arrow-left"></i> Go Back
                 </button>
                 <div class="card profile-header">
@@ -1034,7 +1125,7 @@
             // Track previous tab for go back functionality
             let currentActive = null;
             document.querySelectorAll('.tab-content').forEach(content => {
-                if(content.classList.contains('active')) {
+                if (content.classList.contains('active')) {
                     currentActive = content.id.replace('-tab', '');
                 }
             });
@@ -1064,6 +1155,12 @@
         }
 
         async function loadFeed() {
+            const isAdmin = userData && userData.roles.includes('ROLE_ADMIN');
+            if (isAdmin) {
+                renderAdminHome();
+                return;
+            }
+
             const container = document.getElementById('feed-container');
             try {
                 const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
@@ -1081,6 +1178,42 @@
             }
         }
 
+        function renderAdminHome() {
+            const header = document.getElementById('home-header-container');
+            const container = document.getElementById('feed-container');
+
+            header.innerHTML = `<h2 style="margin-bottom: 1.5rem;"><i class="fa-solid fa-gauge-high"></i> Admin Dashboard</h2>`;
+
+            container.innerHTML = `
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                    <div class="card" style="cursor: pointer; transition: transform 0.2s; background: var(--glass);" onclick="switchTab('admin-stats')">
+                        <i class="fa-solid fa-chart-line" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                        <h3>System Status</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">View server metrics, post statistics, and user growth.</p>
+                    </div>
+                    <div class="card" style="cursor: pointer; transition: transform 0.2s; background: var(--glass);" onclick="switchTab('admin-users')">
+                        <i class="fa-solid fa-users-gear" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                        <h3>Manage Users</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Create new users, update roles, or deactivate accounts.</p>
+                    </div>
+                    <div class="card" style="cursor: pointer; transition: transform 0.2s; background: var(--glass);" onclick="switchTab('admin-content')">
+                        <i class="fa-solid fa-file-shield" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                        <h3>Content Moderation</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Review and delete inappropriate posts or comments.</p>
+                    </div>
+                    <div class="card" style="cursor: pointer; transition: transform 0.2s; background: var(--glass);" onclick="switchTab('admin-chat')">
+                        <i class="fa-solid fa-comments-dollar" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                        <h3>Chat Moderation</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Monitor user conversations for safety and compliance.</p>
+                    </div>
+                </div>
+                <div class="card" style="margin-top: 2rem; background: var(--glass);">
+                    <h4>Welcome, Administrator</h4>
+                    <p style="color: var(--text-muted);">Use the cards above or the sidebar to navigate through administrative functions.</p>
+                </div>
+            `;
+        }
+
         function renderPostCard(post, authorOverride = null, prefix = 'feed') {
             const author = authorOverride || post.author;
             const avatarSrc = author && author.profilePicture
@@ -1089,7 +1222,7 @@
             const authorName = author ? `${author.firstName || ''} ${author.lastName || ''}`.trim() : 'Unknown';
             const likeCount = post.likeCount || (post.likes ? post.likes.length : 0);
             const commentCount = post.commentCount || (post.comments ? post.comments.length : 0);
-            
+
             const heartClass = post.likedByCurrentUser ? 'fa-solid' : 'fa-regular';
             const heartStyle = post.likedByCurrentUser ? 'color: var(--accent);' : '';
 
@@ -1253,7 +1386,7 @@
                     input.value = '';
                     await loadComments(postId, prefix, postAuthor);
                 }
-            } catch(err) { console.error('Reply failed', err); }
+            } catch (err) { console.error('Reply failed', err); }
         }
 
         async function submitComment(postId, prefix) {
@@ -1276,9 +1409,93 @@
             } catch (err) { console.error('Comment failed', err); }
         }
 
+        async function viewPostDetails(postId) {
+            if (!postId) return;
+
+            // Track previous tab
+            let currentOpenTab = 'home';
+            document.querySelectorAll('.tab-content').forEach(content => {
+                if (content.classList.contains('active')) {
+                    const id = content.id.replace('-tab', '');
+                    if (id !== 'post-detail' && id !== 'profile') {
+                        currentOpenTab = id;
+                    }
+                }
+            });
+            previousTab = currentOpenTab;
+
+            const container = document.getElementById('post-detail-content');
+            container.innerHTML = '<p style="text-align:center;padding:2rem;">Loading post...</p>';
+
+            // Switch UI
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById('post-detail-tab').classList.add('active');
+
+            try {
+                const res = await fetch(`${API_BASE}/posts/${postId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    const post = await res.json();
+                    container.innerHTML = renderPostCard(post, null, 'detail');
+                } else {
+                    container.innerHTML = '<p style="text-align:center;color:var(--accent);padding:2rem;">Post not found or inaccessible.</p>';
+                }
+            } catch (err) {
+                console.error("Failed to load post details", err);
+                container.innerHTML = '<p style="text-align:center;color:var(--accent);padding:2rem;">Error loading post details.</p>';
+            }
+        }
+
+        function goBackFromPost() {
+            switchTab(previousTab);
+        }
+
+        async function viewUserActivity(userId, username) {
+            const container = document.getElementById('user-activity-content');
+            document.getElementById('activity-target-username').innerText = "@" + username;
+            container.innerHTML = '<p style="text-align:center;padding:2rem;">Loading activity...</p>';
+
+            switchTab('user-activity');
+
+            try {
+                const res = await fetch(`${API_BASE}/activity/${userId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const logs = await res.json();
+
+                if (logs.length === 0) {
+                    container.innerHTML = '<p style="text-align:center;padding:2rem;color:var(--text-muted);">No activity history found for this user.</p>';
+                } else {
+                    container.innerHTML = `
+                        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                            <thead style="border-bottom: 2px solid var(--glass);">
+                                <tr>
+                                    <th style="padding: 1rem;">Action</th>
+                                    <th style="padding: 1rem;">Timestamp</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${logs.map(log => `
+                                    <tr style="border-bottom: 1px solid var(--glass);">
+                                        <td style="padding: 1rem;">${log.action}</td>
+                                        <td style="padding: 1rem; color: var(--text-muted); font-size: 0.9rem;">${new Date(log.timestamp).toLocaleString()}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                }
+            } catch (err) {
+                console.error("Failed to load user activity", err);
+                container.innerHTML = '<p style="text-align:center;padding:2rem;color:var(--accent);">Error loading activity history.</p>';
+            }
+        }
+
         async function viewProfile(userId) {
-            if(userId === -1) return; // Unknown user guard
-            
+            if (userId === -1) return; // Unknown user guard
+
             // Determine what tab we are currently actively viewing before switching
             let currentOpenTab = 'home';
             document.querySelectorAll('.tab-content').forEach(content => {
@@ -1289,20 +1506,20 @@
                     }
                 }
             });
-            
+
             // Only update previousTab if we are navigating FROM a valid main tab, 
             // not if we are just reloading our own profile.
-            if(currentOpenTab !== 'profile') {
-                 previousTab = currentOpenTab;
+            if (currentOpenTab !== 'profile') {
+                previousTab = currentOpenTab;
             }
 
             await loadProfileStats(userId, true);
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            
+
             // Clean up chat view if open
-            if(document.getElementById('chat-container')) document.getElementById('chat-container').style.display = 'none';
-            if(document.getElementById('messages-list-view')) document.getElementById('messages-list-view').style.display = 'flex';
+            if (document.getElementById('chat-container')) document.getElementById('chat-container').style.display = 'none';
+            if (document.getElementById('messages-list-view')) document.getElementById('messages-list-view').style.display = 'flex';
 
             // Optionally set profile nav item active if it's the current user, or leave it unmarked
             if (userId === userData.id) {
@@ -2028,7 +2245,7 @@
                             <img src="${user.profilePicture ? (user.profilePicture.startsWith('http') || user.profilePicture.startsWith('/') ? user.profilePicture : '/' + user.profilePicture) : 'https://via.placeholder.com/150'}" style="width: 30px; height: 30px; border-radius: 50%;">
                             <div>
                                 <div style="font-weight: 600;">${user.firstName} ${user.lastName}</div>
-                                <div style="font-size: 0.8rem; color: var(--text-muted);">@${user.username}</div>
+                                <div style="font-size: 0.8rem; color: var(--text-muted); cursor: pointer;" onclick="viewProfile(${user.id})">@${user.username}</div>
                             </div>
                         </td>
                         <td style="padding: 1rem;">
@@ -2042,6 +2259,11 @@
                             <span style="padding: 0.25rem 0.5rem; border-radius: 12px; font-size: 0.75rem; background: ${user.active ? 'rgba(34, 197, 94, 0.1)' : 'rgba(239, 68, 68, 0.1)'}; color: ${user.active ? '#16a34a' : '#dc2626'};">
                                 ${user.active ? 'Active' : 'Inactive'}
                             </span>
+                        </td>
+                        <td style="padding: 1rem;">
+                            <button onclick="viewUserActivity(${user.id}, '${user.username}')" class="btn-primary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; background: var(--glass); color: var(--primary);">
+                                <i class="fa-solid fa-clock-rotate-left"></i> View History
+                            </button>
                         </td>
                         <td style="padding: 1rem; display: flex; gap: 0.5rem;">
                             <button onclick="toggleUserStatus(${user.id})" class="btn-primary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; background: var(--glass); color: var(--text-main);">Toggle</button>
@@ -2140,22 +2362,43 @@
         }
 
         async function adminCreateUser() {
+            const firstName = document.getElementById('admin-new-firstName').value;
+            const lastName = document.getElementById('admin-new-lastName').value;
             const username = document.getElementById('admin-new-username').value;
             const email = document.getElementById('admin-new-email').value;
             const password = document.getElementById('admin-new-pass').value;
             const role = document.getElementById('admin-new-role').value;
+            const bio = document.getElementById('admin-new-bio').value;
+            const fileInput = document.getElementById('admin-new-photo');
 
             if (!username || !email || !password) {
-                alert("Please fill in all fields");
+                alert("Please fill in required fields (Username, Email, Password)");
                 return;
             }
 
             try {
-                // First register the user
+                let profilePicture = "";
+                if (fileInput.files.length > 0) {
+                    const formData = new FormData();
+                    formData.append('file', fileInput.files[0]);
+                    const uploadRes = await fetch(`${API_BASE}/files/upload`, {
+                        method: 'POST',
+                        headers: { 'Authorization': `Bearer ${token}` },
+                        body: formData
+                    });
+                    if (uploadRes.ok) {
+                        const uploadData = await uploadRes.json();
+                        profilePicture = uploadData.url;
+                    }
+                }
+
                 const regRes = await fetch(`${API_BASE}/users/register`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, email, password, firstName: '', lastName: '', roles: [role] })
+                    body: JSON.stringify({
+                        username, email, password, firstName, lastName, bio, profilePicture,
+                        roles: [role]
+                    })
                 });
 
                 if (regRes.ok) {
@@ -2163,9 +2406,11 @@
                     toggleAddUserForm();
                     loadAdminUsers();
                     // Clear inputs
-                    document.getElementById('admin-new-username').value = '';
-                    document.getElementById('admin-new-email').value = '';
-                    document.getElementById('admin-new-pass').value = '';
+                    ['admin-new-firstName', 'admin-new-lastName', 'admin-new-username', 'admin-new-email', 'admin-new-pass', 'admin-new-bio'].forEach(id => {
+                        document.getElementById(id).value = '';
+                    });
+                    document.getElementById('admin-new-photo').value = '';
+                    document.getElementById('admin-photo-status').innerText = "Click to select photo";
                 } else {
                     const error = await regRes.text();
                     alert("Failed to create user: " + error);
@@ -2182,7 +2427,8 @@
                 const res = await fetch(`${API_BASE}/posts`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
-                const posts = await res.json();
+                const data = await res.json();
+                const posts = data.content || [];
                 container.innerHTML = `
                     <table style="width: 100%; border-collapse: collapse; text-align: left;">
                         <thead style="border-bottom: 2px solid var(--glass);">
@@ -2196,11 +2442,11 @@
                         <tbody>
                             ${posts.map(post => `
                                 <tr style="border-bottom: 1px solid var(--glass);">
-                                    <td style="padding: 1rem;">
-                                        <div style="font-weight: 600;">${post.title}</div>
+                                    <td style="padding: 1rem; cursor: pointer;" onclick="viewPostDetails(${post.id})">
+                                        <div style="font-weight: 600; color: var(--primary);">${post.title}</div>
                                         <div style="font-size: 0.8rem; color: var(--text-muted);">${post.content.substring(0, 50)}...</div>
                                     </td>
-                                    <td style="padding: 1rem;">${post.author.username}</td>
+                                    <td style="padding: 1rem;"><span style="color: var(--primary); cursor: pointer;" onclick="viewProfile(${post.author.id})">@${post.author.username}</span></td>
                                     <td style="padding: 1rem;">${new Date(post.createdAt).toLocaleDateString()}</td>
                                     <td style="padding: 1rem;">
                                         <button onclick="moderationDeletePost(${post.id})" class="btn-primary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; background: var(--accent);">Delete</button>
@@ -2235,17 +2481,24 @@
             const container = document.getElementById('moderation-container');
             container.innerHTML = '<p style="text-align: center; padding: 2rem;">Loading all comments...</p>';
             try {
-                const postsRes = await fetch(`${API_BASE}/posts`, {
+                const postsRes = await fetch(`${API_BASE}/posts?size=100`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
-                const posts = await postsRes.json();
+                const data = await postsRes.json();
+                const posts = data.content || [];
                 let allComments = [];
                 for (const post of posts) {
                     const comRes = await fetch(`${API_BASE}/comments/post/${post.id}`, {
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
                     const comments = await comRes.json();
-                    allComments = allComments.concat(comments.map(c => ({ ...c, postTitle: post.title })));
+                    allComments = allComments.concat(comments.map(c => ({
+                        ...c,
+                        postId: post.id,
+                        postTitle: post.title,
+                        postAuthor: post.author ? post.author.username : 'Unknown',
+                        postAuthorId: post.author ? post.author.id : -1
+                    })));
                 }
 
                 container.innerHTML = `
@@ -2253,8 +2506,9 @@
                         <thead style="border-bottom: 2px solid var(--glass);">
                             <tr>
                                 <th style="padding: 1rem;">Comment</th>
-                                <th style="padding: 1rem;">Post</th>
-                                <th style="padding: 1rem;">User</th>
+                                <th style="padding: 1rem;">Post Title</th>
+                                <th style="padding: 1rem;">Commenter</th>
+                                <th style="padding: 1rem;">Post Author</th>
                                 <th style="padding: 1rem;">Action</th>
                             </tr>
                         </thead>
@@ -2262,8 +2516,9 @@
                             ${allComments.map(com => `
                                 <tr style="border-bottom: 1px solid var(--glass);">
                                     <td style="padding: 1rem;">${com.content}</td>
-                                    <td style="padding: 1rem; font-size: 0.8rem;">${com.postTitle}</td>
-                                    <td style="padding: 1rem;">${com.user ? com.user.username : 'Unknown'}</td>
+                                    <td style="padding: 1rem; font-size: 0.8rem; cursor: pointer; color: var(--primary);" onclick="viewPostDetails(${com.postId})">${com.postTitle}</td>
+                                    <td style="padding: 1rem;"><span style="color: var(--primary); cursor: pointer;" onclick="viewProfile(${com.authorId})">@${com.authorUsername}</span></td>
+                                    <td style="padding: 1rem;"><span style="color: var(--text-muted); cursor: pointer;" onclick="viewProfile(${com.postAuthorId})">@${com.postAuthor}</span></td>
                                     <td style="padding: 1rem;">
                                         <button onclick="moderationDeleteComment(${com.id})" class="btn-primary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; background: var(--accent);">Delete</button>
                                     </td>
@@ -2322,16 +2577,25 @@
                 if (messages.length === 0) {
                     results.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 1rem;">No messages found between these users.</p>';
                 } else {
-                    results.innerHTML = messages.map(m => `
-                        <div style="padding: 0.75rem; border-bottom: 1px solid var(--glass); display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <strong style="font-size: 0.8rem;">${m.sender.username}:</strong>
-                                <span>${m.content}</span>
-                                <div style="font-size: 0.7rem; color: var(--text-muted);">${new Date(m.timestamp).toLocaleString()}</div>
-                            </div>
-                            <button onclick="moderationDeleteMessage(${m.id})" class="btn-primary" style="padding: 0.2rem 0.4rem; font-size: 0.7rem; background: var(--accent);">Delete</button>
+                    results.innerHTML = `
+                        <div style="display: flex; flex-direction: column; gap: 1rem; padding: 1rem;">
+                            ${messages.map(m => {
+                        const isU1 = m.sender.username === u1;
+                        return `
+                                    <div style="align-self: ${isU1 ? 'flex-start' : 'flex-end'}; max-width: 80%; display: flex; flex-direction: column; align-items: ${isU1 ? 'flex-start' : 'flex-end'};">
+                                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                                            <strong style="font-size: 0.75rem; color: var(--primary);">@${m.sender.username}</strong>
+                                            <span style="font-size: 0.65rem; color: var(--text-muted);">${new Date(m.timestamp).toLocaleString()}</span>
+                                            <button onclick="moderationDeleteMessage(${m.id})" style="background: none; border: none; color: var(--accent); cursor: pointer; font-size: 0.7rem;"><i class="fa-solid fa-trash"></i></button>
+                                        </div>
+                                        <div style="background: ${isU1 ? 'var(--glass)' : 'rgba(var(--primary-rgb), 0.1)'}; color: var(--text-main); padding: 0.75rem; border-radius: 12px; border-${isU1 ? 'top-left' : 'top-right'}-radius: 2px; border: 1px solid var(--glass);">
+                                            ${m.content}
+                                        </div>
+                                    </div>
+                                `;
+                    }).join('')}
                         </div>
-                    `).join('');
+                    `;
                 }
             } catch (err) {
                 console.error("Failed to load chat mod history", err);
