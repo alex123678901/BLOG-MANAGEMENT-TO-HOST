@@ -28,6 +28,7 @@ public class User {
     private String lastName;
 
     private String bio;
+    @Lob
     @Column(columnDefinition = "LONGTEXT")
     private String profilePicture;
     private boolean isActive = true;

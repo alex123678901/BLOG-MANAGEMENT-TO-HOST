@@ -23,6 +23,7 @@ public class BlogPost {
 
     private String summary;
 
+    @Lob
     @Column(columnDefinition = "LONGTEXT")
     private String featuredImage;
 
