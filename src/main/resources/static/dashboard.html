@@ -1117,7 +1117,7 @@
             document.getElementById('header-username').innerText = userData.username;
             if (userData.profilePicture && userData.profilePicture !== "") {
                 let imgPath = userData.profilePicture;
-                if (!imgPath.startsWith('http') && !imgPath.startsWith('/')) {
+                if (!imgPath.startsWith('http') && !imgPath.startsWith('/') && !imgPath.startsWith('data:')) {
                     imgPath = '/' + imgPath;
                 }
                 document.getElementById('header-avatar').src = imgPath;
@@ -1228,7 +1228,7 @@
         function renderPostCard(post, authorOverride = null, prefix = 'feed') {
             const author = authorOverride || post.author;
             const avatarSrc = author && author.profilePicture
-                ? (author.profilePicture.startsWith('http') || author.profilePicture.startsWith('/') ? author.profilePicture : '/' + author.profilePicture)
+                ? (author.profilePicture.startsWith('http') || author.profilePicture.startsWith('/') || author.profilePicture.startsWith('data:') ? author.profilePicture : '/' + author.profilePicture)
                 : 'https://via.placeholder.com/150';
             const authorName = author ? `${author.firstName || ''} ${author.lastName || ''}`.trim() : 'Unknown';
             const likeCount = post.likeCount || (post.likes ? post.likes.length : 0);
@@ -1237,11 +1237,15 @@
             const heartClass = post.likedByCurrentUser ? 'fa-solid' : 'fa-regular';
             const heartStyle = post.likedByCurrentUser ? 'color: var(--accent);' : '';
 
+            const mediaSrc = post.featuredImage
+                ? (post.featuredImage.startsWith('http') || post.featuredImage.startsWith('/') || post.featuredImage.startsWith('data:') ? post.featuredImage : '/' + post.featuredImage)
+                : '';
+
             const mediaHtml = post.mediaType === 'VIDEO'
                 ? `<div class="post-media-container">
-                        <video controls class="post-media"><source src="${post.featuredImage}" type="video/mp4"></video>
+                        <video controls class="post-media"><source src="${mediaSrc}" type="video/mp4"></video>
                     </div>`
-                : (post.featuredImage ? `<div class="post-media-container"><img src="${post.featuredImage}" class="post-media" alt="Post content"></div>` : '');
+                : (mediaSrc ? `<div class="post-media-container"><img src="${mediaSrc}" class="post-media" alt="Post content"></div>` : '');
 
             const actionsHtml = isGuest
                 ? `<div class="post-actions" style="margin-top: auto;">
@@ -1616,7 +1620,7 @@
                 document.getElementById('profile-bio').innerText = displayUser.bio || "No bio yet.";
 
                 let imgPath = displayUser.profilePicture || 'https://via.placeholder.com/150';
-                if (displayUser.profilePicture && !imgPath.startsWith('http') && !imgPath.startsWith('/')) imgPath = '/' + imgPath;
+                if (displayUser.profilePicture && !imgPath.startsWith('http') && !imgPath.startsWith('/') && !imgPath.startsWith('data:')) imgPath = '/' + imgPath;
                 document.getElementById('profile-avatar-img').src = imgPath;
 
                 // Stats and posts: run in parallel if possible
@@ -1718,7 +1722,7 @@
                         <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem;">
                             ${followings.map(u => `
                                 <div class="card" style="display: flex; align-items: center; gap: 1rem; padding: 1rem;">
-                                    <img src="${u.profilePicture ? (u.profilePicture.startsWith('http') || u.profilePicture.startsWith('/') ? u.profilePicture : '/' + u.profilePicture) : 'https://via.placeholder.com/150'}" 
+                                    <img src="${u.profilePicture ? (u.profilePicture.startsWith('http') || u.profilePicture.startsWith('/') || u.profilePicture.startsWith('data:') ? u.profilePicture : '/' + u.profilePicture) : 'https://via.placeholder.com/150'}" 
                                          style="width: 50px; height: 50px; border-radius: 50%; cursor: pointer;"
                                          onclick="viewProfile(${u.id})">
                                     <div style="flex: 1;">
@@ -1870,7 +1874,7 @@
 
                 div.innerHTML = `
             <div style="cursor: pointer; display: flex; align-items: center; gap: 1rem; flex: 1;" onclick="viewProfile(${user.id})">
-                        <img src="${user.profilePicture ? (user.profilePicture.startsWith('http') || user.profilePicture.startsWith('/') ? user.profilePicture : '/' + user.profilePicture) : 'https://via.placeholder.com/150'}" alt="Avatar">
+                        <img src="${user.profilePicture ? (user.profilePicture.startsWith('http') || user.profilePicture.startsWith('/') || user.profilePicture.startsWith('data:') ? user.profilePicture : '/' + user.profilePicture) : 'https://via.placeholder.com/150'}" alt="Avatar">
                         <div class="user-info">
                             <h4>${user.firstName || ''} ${user.lastName || ''}</h4>
                             <p style="color: var(--text-muted);">@${user.username}</p>
@@ -2254,7 +2258,7 @@
                 tbody.innerHTML = users.map(user => `
                     <tr style="border-bottom: 1px solid var(--glass);">
                         <td style="padding: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                            <img src="${user.profilePicture ? (user.profilePicture.startsWith('http') || user.profilePicture.startsWith('/') ? user.profilePicture : '/' + user.profilePicture) : 'https://via.placeholder.com/150'}" style="width: 30px; height: 30px; border-radius: 50%;">
+                            <img src="${user.profilePicture ? (user.profilePicture.startsWith('http') || user.profilePicture.startsWith('/') || user.profilePicture.startsWith('data:') ? user.profilePicture : '/' + user.profilePicture) : 'https://via.placeholder.com/150'}" style="width: 30px; height: 30px; border-radius: 50%;">
                             <div>
                                 <div style="font-weight: 600;">${user.firstName} ${user.lastName}</div>
                                 <div style="font-size: 0.8rem; color: var(--text-muted); cursor: pointer;" onclick="viewProfile(${user.id})">@${user.username}</div>
@@ -2636,7 +2640,7 @@
             document.getElementById('chat-target-name').innerText = username;
 
             const avatarImg = document.getElementById('chat-target-avatar');
-            avatarImg.src = avatar ? (avatar.startsWith('http') || avatar.startsWith('/') ? avatar : '/' + avatar) : 'https://via.placeholder.com/150';
+            avatarImg.src = avatar ? (avatar.startsWith('http') || avatar.startsWith('/') || avatar.startsWith('data:') ? avatar : '/' + avatar) : 'https://via.placeholder.com/150';
 
             switchTab('messages');
             loadChatHistory();
