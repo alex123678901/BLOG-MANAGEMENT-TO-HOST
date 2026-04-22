@@ -23,6 +23,7 @@ public class BlogPost {
 
     private String summary;
 
+    @Column(columnDefinition = "LONGTEXT")
     private String featuredImage;
 
     private LocalDateTime createdAt;

@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS users (
     first_name VARCHAR(255),
     last_name VARCHAR(255),
     bio TEXT,
-    profile_picture VARCHAR(255),
+    profile_picture LONGTEXT,
     is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS blog_posts (
     title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
     summary VARCHAR(255),
-    featured_image VARCHAR(255),
+    featured_image LONGTEXT,
     status VARCHAR(50) DEFAULT 'DRAFT',
     media_type VARCHAR(50) DEFAULT 'BLOG',
     view_count INT DEFAULT 0,

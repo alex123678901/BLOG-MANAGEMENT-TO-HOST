@@ -71,28 +71,24 @@
 
     <script src="/js/app.js"></script>
     <script>
+        const toBase64 = file => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+
         document.getElementById('register-form').addEventListener('submit', async (e) => {
             e.preventDefault();
 
             const fileInput = document.getElementById('profilePicture');
-            let profilePictureUrl = '';
+            let profilePictureBase64 = '';
 
             if (fileInput.files.length > 0) {
-                const formData = new FormData();
-                formData.append('file', fileInput.files[0]);
                 try {
-                    const uploadRes = await fetch('/api/files/upload', {
-                        method: 'POST',
-                        body: formData
-                    });
-                    const uploadData = await uploadRes.json();
-                    if (uploadRes.ok) {
-                        profilePictureUrl = uploadData.url;
-                    } else {
-                        throw new Error(uploadData.error || 'File upload failed');
-                    }
+                    profilePictureBase64 = await toBase64(fileInput.files[0]);
                 } catch (err) {
-                    alert('Upload Error: ' + err.message);
+                    alert('Error processing image: ' + err.message);
                     return;
                 }
             }
@@ -104,7 +100,7 @@
                 email: document.getElementById('email').value,
                 password: document.getElementById('password').value,
                 bio: document.getElementById('bio').value,
-                profilePicture: profilePictureUrl,
+                profilePicture: profilePictureBase64,
                 roles: [document.getElementById('role').value]
             };
 
